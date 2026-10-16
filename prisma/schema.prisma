@@ -1,0 +1,125 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Pattern {
+  id               String        @id @default(uuid())
+  slug             String        @unique
+  name             String
+  description      String
+  category         String
+  recognitionHints String[]
+  commonApproaches String[]
+  commonMistakes   String[]
+  difficultyLevel  String
+  sortOrder        Int           @default(0)
+  tags             String[]
+  questions        DSAQuestion[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model DSAQuestion {
+  id               String   @id @default(uuid())
+  slug             String   @unique
+  title            String
+  externalUrl      String
+  platform         String
+  difficulty       String
+  editorialNote    String
+  recommendedOrder Int      @default(0)
+  patterns         Pattern[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Technology {
+  id                 String              @id @default(uuid())
+  slug               String              @unique
+  name               String
+  description        String
+  category           String
+  sortOrder          Int                 @default(0)
+  iconName           String
+  colorClass         String
+  tagline            String
+  resources          LearningResource[]
+  paidCourses        PaidCourse[]
+  interviewQuestions InterviewQuestion[]
+  projects           Project[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model LearningResource {
+  id                 String     @id @default(uuid())
+  slug               String     @unique
+  title              String
+  url                String
+  technologyId       String
+  technology         Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  resourceType       String
+  provider           String
+  level              String
+  pricingCategory    String     @default("Free")
+  description        String
+  verificationStatus String
+  lastVerifiedAt     String
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+}
+
+model PaidCourse {
+  id              String     @id @default(uuid())
+  slug            String     @unique
+  title           String
+  technologyId    String
+  technology      Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  provider        String
+  instructor      String
+  topicCoverage   String[]
+  level           String
+  pricingCategory String
+  officialUrl     String
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model InterviewQuestion {
+  id             String     @id @default(uuid())
+  slug           String     @unique
+  title          String
+  technologyId   String
+  technology     Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  topic          String
+  difficulty     String
+  explanation    String
+  codeExample    String?
+  outputPrediction String?
+  keyTakeaways   String[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Project {
+  id             String       @id @default(uuid())
+  slug           String       @unique
+  title          String
+  description    String
+  difficulty     String
+  category       String
+  technologies   Technology[]
+  problemSolved  String
+  coreFeatures   String[]
+  milestones     Json
+  skillsLearned  String[]
+  stretchGoals   String[]
+  referenceLinks Json
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
