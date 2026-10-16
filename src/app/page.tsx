@@ -37,35 +37,35 @@ export default function HomePage() {
           {/* Eyebrow badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium text-orange-400 bg-orange-500/10 border border-orange-500/20 shadow-sm">
             <Flame className="w-3.5 h-3.5" />
-            <span>Developer Learning &amp; Interview Preparation</span>
+            <span>Personalized Developer Interview Preparation</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
-            Your Roadmap to Becoming{" "}
+            Forge Your Skills.{" "}
             <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-              Interview-Ready.
+              Crack Your Dream Role.
             </span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Discover the right DSA problems, learn modern developer technologies, prepare for interviews, and build projects that demonstrate your skills.
+            The all-in-one preparation platform with an interactive study calendar, 18 DSA problem patterns, sandboxed SQL queries, core CS mastery, and automated spaced repetition.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <Link
-              href="/dsa-patterns"
+              href="/signup"
               className="px-6 py-3 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 shadow-lg shadow-orange-500/20 transition transform active:scale-95 flex items-center gap-2"
             >
-              <span>Explore DSA Patterns</span>
+              <span>Get Started Free</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
             <Link
-              href="/developer"
+              href="/calendar"
               className="px-6 py-3 rounded-xl font-semibold text-sm text-slate-200 bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition transform active:scale-95 flex items-center gap-2"
             >
-              <span>Explore Developer Hub</span>
+              <span>Preparation Calendar</span>
               <Terminal className="w-4 h-4 text-orange-400" />
             </Link>
           </div>
@@ -74,15 +74,15 @@ export default function HomePage() {
           <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-mono">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              Interactive Prep Calendar
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               18 Core DSA Patterns
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Genuine Official Links
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Production Project Blueprints
+              Core CS &amp; SQL Playground
             </span>
           </div>
         </div>
@@ -101,12 +101,16 @@ export default function HomePage() {
             <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-mono">DSA Patterns</div>
           </div>
           <div className="text-center p-3">
-            <div className="text-3xl font-extrabold text-orange-400 font-mono">9</div>
+            <div className="text-3xl font-extrabold text-orange-400 font-mono">30-Day</div>
+            <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-mono">Dynamic Calendar</div>
+          </div>
+          <div className="text-center p-3">
+            <div className="text-3xl font-extrabold text-emerald-400 font-mono">9</div>
             <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-mono">Tech Deep Dives</div>
           </div>
           <div className="text-center p-3">
-            <div className="text-3xl font-extrabold text-emerald-400 font-mono">16+</div>
-            <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-mono">Portfolio Projects</div>
+            <div className="text-3xl font-extrabold text-purple-400 font-mono">100%</div>
+            <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider font-mono">Data Persistence</div>
           </div>
           <div className="text-center p-3">
             <div className="text-3xl font-extrabold text-sky-400 font-mono">100%</div>
