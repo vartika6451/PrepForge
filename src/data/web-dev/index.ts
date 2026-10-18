@@ -1,0 +1,25 @@
+import { WebDevQuestion } from "@/types/web-dev";
+import { JAVASCRIPT_TYPESCRIPT_QUESTIONS } from "./javascript-typescript";
+import { REACT_QUESTIONS } from "./react";
+import { BROWSER_CSS_QUESTIONS } from "./browser-css";
+import { BACKEND_APIS_QUESTIONS } from "./backend-apis";
+import { DATABASES_SECURITY_QUESTIONS } from "./databases-security";
+import { PERFORMANCE_TESTING_QUESTIONS } from "./performance-testing";
+
+export const WEB_DEV_QUESTIONS: WebDevQuestion[] = [
+  ...JAVASCRIPT_TYPESCRIPT_QUESTIONS,
+  ...REACT_QUESTIONS,
+  ...BROWSER_CSS_QUESTIONS,
+  ...BACKEND_APIS_QUESTIONS,
+  ...DATABASES_SECURITY_QUESTIONS,
+  ...PERFORMANCE_TESTING_QUESTIONS,
+];
+
+export {
+  JAVASCRIPT_TYPESCRIPT_QUESTIONS,
+  REACT_QUESTIONS,
+  BROWSER_CSS_QUESTIONS,
+  BACKEND_APIS_QUESTIONS,
+  DATABASES_SECURITY_QUESTIONS,
+  PERFORMANCE_TESTING_QUESTIONS,
+};
