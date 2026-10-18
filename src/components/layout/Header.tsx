@@ -26,10 +26,11 @@ export function Header() {
     return () => window.removeEventListener("toggle-search-modal", handleToggle);
   }, []);
 
-  // Close mobile drawer when pathname changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setMobileMenuOpen(false);
-  }, [pathname]);
+  }
 
   return (
     <>

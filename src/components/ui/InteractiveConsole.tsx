@@ -125,7 +125,7 @@ export function InteractiveConsole() {
 
           {/* Interactive Code Trace Preview */}
           <div className="rounded-xl border border-slate-800 bg-[#070a12] p-4 font-mono text-xs text-slate-300 overflow-x-auto">
-            <span className="text-slate-500">// Canonical Two-Pointer Sliding Window Template</span>
+            <span className="text-slate-500">{"// Canonical Two-Pointer Sliding Window Template"}</span>
             <pre className="mt-2 text-slate-300">
 {`function lengthOfLongestSubstring(s: string): number {
   const lastSeen = new Map<string, number>();
@@ -173,7 +173,7 @@ export function InteractiveConsole() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="rounded-xl border border-slate-800 bg-[#070a12] p-4 font-mono text-xs overflow-x-auto">
-              <span className="text-slate-500">// Predict the console output</span>
+              <span className="text-slate-500">{"// Predict the console output"}</span>
               <pre className="mt-2 text-slate-300">
 {`console.log("A");
 
