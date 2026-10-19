@@ -13,9 +13,11 @@ import { WebDevTopicWithCount, getFeaturedQuestion } from "@/lib/data/web-dev";
 import { getQuestionStatus, useUserPracticeStore } from "@/lib/web-dev-progress";
 import { WebDevHubHeader } from "./WebDevHubHeader";
 import { PracticeModeSelector } from "./PracticeModeSelector";
+import { DueRevisionBanner } from "./DueRevisionBanner";
 import { FeaturedChallenge } from "./FeaturedChallenge";
 import { TopicGrid } from "./TopicGrid";
 import { QuestionLibrary } from "./QuestionLibrary";
+import { ProgressInsightsSnippet } from "./ProgressInsightsSnippet";
 
 interface WebDevHubClientProps {
   initialQuestions: WebDevQuestion[];
@@ -133,27 +135,30 @@ export function WebDevHubClient({
   }, [activeMode]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-8">
       {/* Section A — Compact header with resume draft and revision badge */}
       <WebDevHubHeader />
 
-      {/* Section B — Choose your practice mode */}
+      {/* Section B — Quick practice actions: Explain, Debug, Build, Quick Interview Round */}
       <PracticeModeSelector
         activeMode={activeMode}
         onSelectMode={handleSelectMode}
       />
 
-      {/* Section C — Featured challenge */}
+      {/* Section C — Due revision prompt (only shown if revisions are due) */}
+      <DueRevisionBanner />
+
+      {/* Section D — Featured challenge */}
       <FeaturedChallenge question={featured} />
 
-      {/* Section D — Explore by topic with real progress */}
+      {/* Section E — Explore by topic with real progress */}
       <TopicGrid
         topics={topicsWithCounts}
         activeTopic={activeTopic}
         onSelectTopic={handleSelectTopic}
       />
 
-      {/* Section E — Question library with status filtering */}
+      {/* Section F — Question library with status filtering */}
       <QuestionLibrary
         questions={filteredQuestions}
         totalQuestionsCount={initialQuestions.length}
@@ -170,6 +175,9 @@ export function WebDevHubClient({
         onClearAllFilters={handleClearAllFilters}
         hasActiveFilters={hasActiveFilters}
       />
+
+      {/* Section G — Small progress insights entry point (only when progress exists) */}
+      <ProgressInsightsSnippet />
     </div>
   );
 }

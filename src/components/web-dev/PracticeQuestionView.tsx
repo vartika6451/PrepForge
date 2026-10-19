@@ -1,16 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  FileText,
-  Target,
-  Code2,
-  ExternalLink,
-  BookOpen,
-  Layers,
-  Copy,
-  Check,
-} from "lucide-react";
 import { WebDevQuestion } from "@/types/web-dev";
 import {
   useUserPracticeStore,
@@ -27,14 +17,11 @@ import {
 } from "@/lib/web-dev-progress";
 import { getAllWebDevQuestions } from "@/lib/data/web-dev";
 import { PracticeWorkspaceHeader } from "./practice/PracticeWorkspaceHeader";
-import { ExplainWorkspace } from "./practice/ExplainWorkspace";
-import { DebugWorkspace } from "./practice/DebugWorkspace";
-import { BuildWorkspace } from "./practice/BuildWorkspace";
-import { ProgressiveHints } from "./practice/ProgressiveHints";
-import { SolutionReview } from "./practice/SolutionReview";
-import { ConfidenceAssessment } from "./practice/ConfidenceAssessment";
+import { PracticeStageNav, PracticeStage } from "./practice/PracticeStageNav";
+import { PracticeUnderstandStage } from "./practice/PracticeUnderstandStage";
+import { PracticeAttemptStage } from "./practice/PracticeAttemptStage";
+import { PracticeReviewStage } from "./practice/PracticeReviewStage";
 import { MistakeJournalModal } from "./practice/MistakeJournalModal";
-import { PracticeNavigationFooter } from "./practice/PracticeNavigationFooter";
 
 interface PracticeQuestionViewProps {
   question: WebDevQuestion;
@@ -50,16 +37,35 @@ export function PracticeQuestionView({
   const revision = store.revisions[question.slug];
   const mistakes = store.mistakeJournal || [];
 
-  const [isJournalOpen, setIsJournalOpen] = useState(false);
-  const [copiedCode, setCopiedCode] = useState(false);
-
-  // Load all questions for navigation if not passed
   const catalog = allQuestions || getAllWebDevQuestions();
-  const revisionQueue = getRevisionQueue();
+  const revisionQueue = getRevisionQueue(store);
+
+  // Determine smart initial stage
+  const [stage, setStage] = useState<PracticeStage>(() => {
+    if (attempt.status === "completed" || attempt.solutionRevealed) {
+      return "review";
+    }
+    if (attempt.status === "in_progress") {
+      return "attempt";
+    }
+    return "understand";
+  });
+
+  const [isJournalOpen, setIsJournalOpen] = useState(false);
 
   useEffect(() => {
     markQuestionVisited(question.slug);
   }, [question.slug]);
+
+  const handleStageChange = (newStage: PracticeStage) => {
+    if (newStage === "review" && hasDraft && !attempt.solutionRevealed) {
+      handleRevealSolution();
+    }
+    setStage(newStage);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleSaveExplainDraft = (draft: string) => {
     saveQuestionDraft(question.slug, { draftAnswer: draft });
@@ -99,211 +105,104 @@ export function PracticeQuestionView({
 
   const handleResetAttempt = () => {
     resetQuestionAttempt(question.slug);
+    setStage("understand");
   };
 
-  const handleCopyStarterCode = () => {
-    if (!question.starterCode) return;
-    navigator.clipboard.writeText(question.starterCode);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
+  // Find next question in topic or catalog
+  const sameTopicQuestions = catalog.filter((q) => q.topic === question.topic);
+  const currentTopicIndex = sameTopicQuestions.findIndex((q) => q.slug === question.slug);
+
+  let nextQuestion: WebDevQuestion | null = null;
+  if (currentTopicIndex !== -1 && currentTopicIndex < sameTopicQuestions.length - 1) {
+    nextQuestion = sameTopicQuestions[currentTopicIndex + 1];
+  } else {
+    const globalIndex = catalog.findIndex((q) => q.slug === question.slug);
+    if (globalIndex !== -1 && globalIndex < catalog.length - 1) {
+      nextQuestion = catalog[globalIndex + 1];
+    } else if (catalog.length > 0) {
+      nextQuestion = catalog[0];
+    }
+  }
 
   const questionMistakeCount = mistakes.filter(
     (m) => m.questionSlug === question.slug
   ).length;
 
+  const hasDraft = Boolean(
+    (attempt.draftAnswer && attempt.draftAnswer.trim().length > 0) ||
+    (attempt.rootCauseDraft && attempt.rootCauseDraft.trim().length > 0)
+  );
+
+  const isReviewed = Boolean(
+    attempt.solutionRevealed || attempt.status === "completed"
+  );
+
+  // Width: 860px max for Explain & Debug, 960px max for Build mode
+  const contentWidthClass =
+    question.mode === "build" ? "max-w-[960px]" : "max-w-[860px]";
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-8">
-      {/* 1. Header with Breadcrumb, Title, Metadata, Status & Bookmark */}
+    <main className={`mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 ${contentWidthClass} space-y-6 sm:space-y-8`}>
+      {/* 1. Header: Back link, Topic, Status, Bookmark, Question Title & Summary */}
       <PracticeWorkspaceHeader
         question={question}
         status={attempt.status}
         onResetAttempt={handleResetAttempt}
       />
 
-      {/* 2. Responsive Workspace Layout:
-          Desktop: 2 columns (Left: Problem Context & Requirements, Right: Learner Workspace & Solutions)
-          Mobile: 1 column
-      */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Problem Panel (5 of 12 cols on desktop) */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Interview Scenario */}
-          <section className="p-5 sm:p-6 rounded-2xl border border-slate-800 bg-[#0f172a]/70 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-orange-400 font-semibold">
-              <FileText className="w-4 h-4" />
-              <span>Interview Scenario</span>
-            </div>
-            <div className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line font-normal">
-              {question.scenario}
-            </div>
-          </section>
+      {/* 2. Three-Step Practice Flow Segmented Switcher */}
+      <PracticeStageNav
+        currentStage={stage}
+        onSelectStage={handleStageChange}
+        hasDraft={hasDraft}
+        isReviewed={isReviewed}
+      />
 
-          {/* Key Task Requirements */}
-          <section className="p-5 sm:p-6 rounded-2xl border border-slate-800 bg-[#0f172a]/70 space-y-4">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">
-              <Target className="w-4 h-4 text-orange-400" />
-              <span>Task Requirements</span>
-            </div>
-            <ul className="space-y-3">
-              {question.requirements.map((req, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-start gap-3 text-xs sm:text-sm text-slate-300 leading-relaxed"
-                >
-                  <span className="w-5 h-5 rounded-full bg-slate-800 text-orange-400 border border-slate-700/80 flex items-center justify-center text-[11px] font-mono shrink-0 mt-0.5">
-                    {idx + 1}
-                  </span>
-                  <span>{req}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Starter Code Preview (for Build and Debug modes) */}
-          {question.starterCode && (
-            <section className="p-5 sm:p-6 rounded-2xl border border-slate-800 bg-[#0f172a]/70 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">
-                  <Code2 className="w-4 h-4 text-orange-400" />
-                  <span>
-                    {question.mode === "build"
-                      ? "Starter Template"
-                      : "Problem Code Snippet"}
-                  </span>
-                </div>
-                <button
-                  onClick={handleCopyStarterCode}
-                  type="button"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white bg-slate-800/80 transition"
-                >
-                  {copiedCode ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto max-h-[360px] overflow-y-auto leading-relaxed whitespace-pre">
-                {question.starterCode}
-              </div>
-            </section>
-          )}
-
-          {/* Skills Tested */}
-          <div className="p-5 rounded-2xl border border-slate-800/80 bg-slate-900/30 space-y-2.5">
-            <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-slate-500" />
-              <span>Skills Assessed</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {question.skillsTested.map((skill) => (
-                <span
-                  key={skill}
-                  className="px-2.5 py-1 rounded-md text-xs font-medium text-slate-300 bg-slate-800/60 border border-slate-700/50"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* References & Further Reading */}
-          {question.references && question.references.length > 0 && (
-            <div className="p-5 rounded-2xl border border-slate-800/80 bg-slate-900/30 space-y-2.5">
-              <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-slate-500" />
-                <span>Reference Documentation</span>
-              </div>
-              <ul className="space-y-1.5">
-                {question.references.map((ref, idx) => (
-                  <li key={idx}>
-                    <a
-                      href={ref.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 hover:underline transition"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                      <span>{ref.title}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* Right Column: Learner Workspace, Hints, Review & Assessment (7 of 12 cols on desktop) */}
-        <div className="lg:col-span-7 space-y-8">
-          {/* Mode-Specific Answer Workspace */}
-          {question.mode === "explain" && (
-            <ExplainWorkspace
-              key={`${question.slug}-${attempt.attemptCount}`}
-              initialDraft={attempt.draftAnswer}
-              onSaveDraft={handleSaveExplainDraft}
-            />
-          )}
-
-          {question.mode === "debug" && (
-            <DebugWorkspace
-              key={`${question.slug}-${attempt.attemptCount}`}
-              initialRootCause={attempt.rootCauseDraft || ""}
-              initialFix={attempt.fixDraft || attempt.draftAnswer || ""}
-              onSaveDraft={handleSaveDebugDraft}
-            />
-          )}
-
-          {question.mode === "build" && (
-            <BuildWorkspace
-              key={`${question.slug}-${attempt.attemptCount}`}
-              starterCode={question.starterCode}
-              initialDraft={attempt.draftAnswer}
-              programmingLanguage={question.programmingLanguage || "typescript"}
-              onSaveDraft={handleSaveBuildDraft}
-            />
-          )}
-
-          {/* Progressive Hints Component */}
-          <ProgressiveHints
-            hints={question.hints}
-            revealedHints={attempt.hintsRevealed}
-            onRevealHint={handleRevealHint}
+      {/* 3. Single Centered Main Stage Content */}
+      <div className="pt-1">
+        {stage === "understand" && (
+          <PracticeUnderstandStage
+            question={question}
+            onProceedToAttempt={() => handleStageChange("attempt")}
           />
+        )}
 
-          {/* Reference Solution, Rubric & Follow-Up */}
-          <SolutionReview
+        {stage === "attempt" && (
+          <PracticeAttemptStage
             question={question}
             attempt={attempt}
+            onSaveExplainDraft={handleSaveExplainDraft}
+            onSaveDebugDraft={handleSaveDebugDraft}
+            onSaveBuildDraft={handleSaveBuildDraft}
+            onRevealHint={handleRevealHint}
+            onBackToUnderstand={() => handleStageChange("understand")}
+            onContinueToReview={() => {
+              if (hasDraft && !attempt.solutionRevealed) {
+                handleRevealSolution();
+              }
+              handleStageChange("review");
+            }}
+          />
+        )}
+
+        {stage === "review" && (
+          <PracticeReviewStage
+            question={question}
+            attempt={attempt}
+            revision={revision}
+            nextQuestionSlug={nextQuestion?.slug}
+            nextQuestionTitle={nextQuestion?.title}
+            revisionDueCount={revisionQueue.dueNow.length}
             onRevealSolution={handleRevealSolution}
             onToggleRubric={handleToggleRubric}
             onRevealFollowUp={handleRevealFollowUp}
-          />
-
-          {/* Confidence Assessment & Spaced Revision Scheduling */}
-          <ConfidenceAssessment
-            attempt={attempt}
-            revision={revision}
             onSubmitConfidence={handleSubmitConfidence}
             onOpenMistakeJournal={() => setIsJournalOpen(true)}
+            onBackToAttempt={() => handleStageChange("attempt")}
             mistakeCount={questionMistakeCount}
           />
-        </div>
+        )}
       </div>
-
-      {/* 3. Navigation Footer */}
-      <PracticeNavigationFooter
-        currentQuestion={question}
-        allQuestions={catalog}
-        revisionDueCount={revisionQueue.dueNow.length}
-      />
 
       {/* 4. Mistake Journal Modal */}
       <MistakeJournalModal
@@ -313,6 +212,6 @@ export function PracticeQuestionView({
         isOpen={isJournalOpen}
         onClose={() => setIsJournalOpen(false)}
       />
-    </div>
+    </main>
   );
 }

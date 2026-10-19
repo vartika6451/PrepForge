@@ -29,9 +29,9 @@ export function ModeBadge({ mode, className = "" }: { mode: PracticeMode; classN
   if (mode === "explain") {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border text-sky-400 bg-sky-500/10 border-sky-500/20 ${className}`}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium border border-[#99958E] bg-[#CFCCC6] text-[#272624] ${className}`}
       >
-        <MessageSquareText className="w-3 h-3 text-sky-400" />
+        <MessageSquareText className="w-3 h-3 text-[#A34823]" />
         <span>Explain</span>
       </span>
     );
@@ -40,9 +40,9 @@ export function ModeBadge({ mode, className = "" }: { mode: PracticeMode; classN
   if (mode === "debug") {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border text-amber-400 bg-amber-500/10 border-amber-500/20 ${className}`}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium border border-[#99958E] bg-[#CFCCC6] text-[#272624] ${className}`}
       >
-        <Bug className="w-3 h-3 text-amber-400" />
+        <Bug className="w-3 h-3 text-[#A34823]" />
         <span>Debug</span>
       </span>
     );
@@ -50,9 +50,9 @@ export function ModeBadge({ mode, className = "" }: { mode: PracticeMode; classN
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border text-orange-400 bg-orange-500/10 border-orange-500/20 ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium border border-[#99958E] bg-[#CFCCC6] text-[#272624] ${className}`}
     >
-      <Code2 className="w-3 h-3 text-orange-400" />
+      <Code2 className="w-3 h-3 text-[#A34823]" />
       <span>Build</span>
     </span>
   );
@@ -65,20 +65,20 @@ export function WebDevDifficultyBadge({
   difficulty: QuestionDifficulty;
   className?: string;
 }) {
-  let colorClass = "";
+  let styleClass = "";
   if (difficulty === "foundation") {
-    colorClass = "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+    styleClass = "border-[#99958E] bg-[#BBB7B0] text-[#383431]";
   } else if (difficulty === "applied") {
-    colorClass = "text-blue-400 bg-blue-500/10 border-blue-500/20";
+    styleClass = "border-[#99958E] bg-[#CFCCC6] text-[#272624] font-medium";
   } else {
-    colorClass = "text-rose-400 bg-rose-500/10 border-rose-500/20";
+    styleClass = "border-[#A34823]/40 bg-[#C9A28E]/40 text-[#272624] font-semibold";
   }
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${colorClass} ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${styleClass} ${className}`}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80" />
+      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-70" />
       {formatDifficultyLabel(difficulty)}
     </span>
   );
@@ -96,7 +96,7 @@ export function TopicBadge({
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-mono text-slate-300 bg-slate-800/80 border border-slate-700/60 ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-mono border border-[#99958E] bg-[#BBB7B0] text-[#272624] ${className}`}
     >
       {name}
     </span>

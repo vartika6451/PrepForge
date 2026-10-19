@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, KeyboardEvent } from "react";
-import { Code2, Check, RotateCcw, Copy } from "lucide-react";
+import { FileCode, Check, RotateCcw, Copy } from "lucide-react";
 
 interface BuildWorkspaceProps {
   starterCode?: string;
@@ -35,7 +35,6 @@ export function BuildWorkspace({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    // 2-space tab indentation
     if (e.key === "Tab") {
       e.preventDefault();
       const target = e.currentTarget;
@@ -59,7 +58,7 @@ export function BuildWorkspace({
 
   const handleReset = () => {
     if (starterCode) {
-      const confirmed = window.confirm("Reset code back to the original starter template? Your current edits will be replaced.");
+      const confirmed = window.confirm("Reset code back to the original starter template?");
       if (!confirmed) return;
       setCode(starterCode);
       onSaveDraft(starterCode);
@@ -73,69 +72,96 @@ export function BuildWorkspace({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const getFilename = () => {
+    if (programmingLanguage === "tsx" || programmingLanguage === "react") return "Component.tsx";
+    if (programmingLanguage === "css") return "styles.css";
+    if (programmingLanguage === "javascript") return "solution.js";
+    return "solution.ts";
+  };
+
+  const codeLines = code.split("\n");
+
   return (
     <div className="space-y-2">
-      {/* Action Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400">
-        <div className="flex items-center gap-2 text-orange-400">
-          <Code2 className="w-3.5 h-3.5" />
-          <span>Implementation Editor</span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
-            {programmingLanguage}
-          </span>
-        </div>
+      {/* Code Editor Surface */}
+      <div className="rounded-xl border border-[#333333] bg-[#1E1E1E] overflow-hidden focus-within:border-[#007ACC] transition-colors shadow-md">
+        {/* Editor Top Bar (VS Code style) */}
+        <div className="flex items-center justify-between px-3.5 py-1.5 border-b border-[#333333] bg-[#252526] text-xs font-mono text-[#CCCCCC]">
+          {/* File Tab */}
+          <div className="flex items-center gap-2 bg-[#1E1E1E] text-[#EDEAE4] px-3 py-1 rounded-t border-t-2 border-[#007ACC] -mb-1.5 z-10">
+            <FileCode className="w-3.5 h-3.5 text-[#3178C6]" />
+            <span className="font-medium text-xs text-[#CCCCCC]">{getFilename()}</span>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 text-[11px] text-slate-400">
-            {isSaved ? (
-              <>
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span>Saved locally</span>
-              </>
-            ) : (
-              <span className="text-amber-400">Saving...</span>
-            )}
-          </span>
+          {/* Editor Actions & Status */}
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] font-mono text-[#858585] hidden sm:inline">
+              {codeLines.length} {codeLines.length === 1 ? "line" : "lines"}
+            </span>
 
-          <button
-            onClick={handleCopy}
-            type="button"
-            className="hover:text-white transition flex items-center gap-1"
-          >
-            <Copy className="w-3 h-3" />
-            <span>{copied ? "Copied" : "Copy"}</span>
-          </button>
+            <span className="flex items-center gap-1.5 text-[11px]">
+              <span
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  isSaved ? "bg-[#4EC9B0]" : "bg-[#858585] animate-pulse"
+                }`}
+              />
+              <span className="text-[#858585]">{isSaved ? "Saved" : "Saving..."}</span>
+            </span>
 
-          {starterCode && (
             <button
-              onClick={handleReset}
+              onClick={handleCopy}
               type="button"
-              className="hover:text-rose-400 transition flex items-center gap-1"
-              title="Reset to starter template"
+              className="hover:text-white text-[#858585] transition flex items-center gap-1 cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" />
-              <span>Reset</span>
+              <Copy className="w-3 h-3" />
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
-          )}
+
+            {starterCode && (
+              <button
+                onClick={handleReset}
+                type="button"
+                className="hover:text-white text-[#858585] transition flex items-center gap-1 cursor-pointer"
+                title="Reset to starter template"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Textarea Code Body with Gutter */}
+        <div className="flex bg-[#1E1E1E] text-xs sm:text-sm font-mono overflow-hidden min-h-[340px]">
+          {/* Line Numbers Gutter */}
+          <div
+            className="select-none py-4 pl-3 pr-3 text-right border-r border-[#333333] text-[#6E7681] bg-[#1E1E1E] shrink-0 font-mono text-xs"
+            style={{ minWidth: codeLines.length >= 100 ? "3.5rem" : "2.75rem" }}
+            aria-hidden="true"
+          >
+            {codeLines.map((_, i) => (
+              <div key={i} className="leading-relaxed">
+                {i + 1}
+              </div>
+            ))}
+          </div>
+
+          {/* Code Textarea */}
+          <textarea
+            value={code}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            rows={16}
+            spellCheck={false}
+            aria-label="Code implementation editor"
+            className="flex-1 p-4 bg-transparent text-xs sm:text-sm font-mono text-[#EDEAE4] placeholder:text-[#6E7681] leading-relaxed focus:outline-none resize-y"
+          />
         </div>
       </div>
 
-      {/* Editor Textarea */}
-      <div className="relative rounded-xl border border-slate-800 bg-[#070a12] overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition">
-        <textarea
-          value={code}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          rows={14}
-          spellCheck={false}
-          aria-label="Code implementation editor"
-          className="w-full p-4 bg-transparent text-sm font-mono text-slate-100 placeholder:text-slate-400 leading-relaxed focus:outline-none resize-y min-h-[280px]"
-        />
-      </div>
-
-      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+      <div className="flex items-center justify-between text-[11px] font-mono text-[#383431]">
         <span>Press Tab to indent 2 spaces.</span>
-        <span className="text-slate-400">Self-assessment workspace • Code is evaluated via reference comparison</span>
+        <span>Autosaves to local storage</span>
       </div>
     </div>
   );

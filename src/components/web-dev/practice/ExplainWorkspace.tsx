@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, KeyboardEvent } from "react";
-import { MessageSquareText, Check } from "lucide-react";
+import { MessageSquareText } from "lucide-react";
 
 interface ExplainWorkspaceProps {
   initialDraft: string;
@@ -29,7 +29,6 @@ export function ExplainWorkspace({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    // Tab key inserts 2 spaces
     if (e.key === "Tab") {
       e.preventDefault();
       const target = e.currentTarget;
@@ -54,39 +53,44 @@ export function ExplainWorkspace({
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-        <div className="flex items-center gap-1.5 text-sky-400">
-          <MessageSquareText className="w-3.5 h-3.5" />
-          <span>Your Technical Explanation</span>
+    <div className="space-y-2.5">
+      {/* Workspace Header Toolbar */}
+      <div className="flex items-center justify-between text-xs font-mono text-[#383431]">
+        <div className="flex items-center gap-2 text-[#272624] font-semibold">
+          <MessageSquareText className="w-3.5 h-3.5 text-[#A34823]" />
+          <span>Technical Explanation</span>
         </div>
+
         <div className="flex items-center gap-3">
           <span>{wordCount} {wordCount === 1 ? "word" : "words"}</span>
-          <span className="flex items-center gap-1 text-[11px] text-slate-400">
-            {isSaved ? (
-              <>
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span>Saved locally</span>
-              </>
-            ) : (
-              <span className="text-amber-400">Saving...</span>
-            )}
+          <span className="flex items-center gap-1.5 text-[11px]">
+            <span
+              className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                isSaved ? "bg-[#A34823]" : "bg-[#99958E] animate-pulse"
+              }`}
+            />
+            <span className="text-[#383431]">{isSaved ? "Saved" : "Saving..."}</span>
           </span>
         </div>
       </div>
 
-      <textarea
-        value={text}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        placeholder="Type your explanation as if answering an interviewer. State the core concept, describe the runtime/event loop mechanics, identify key trade-offs, and mention common pitfalls..."
-        rows={10}
-        aria-label="Your technical explanation"
-        className="w-full p-4 rounded-xl border border-slate-800 bg-[#090d16] text-sm text-slate-200 placeholder:text-slate-400 leading-relaxed font-sans focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition resize-y min-h-[220px]"
-      />
-      <p className="text-[11px] text-slate-400 font-mono">
-        Tip: Press Tab to indent. Answer autosaves automatically to your browser.
-      </p>
+      {/* Editor Surface */}
+      <div className="rounded-xl border border-[#99958E] bg-[#2D2C2A] overflow-hidden focus-within:border-[#A34823] transition-colors shadow-xs">
+        <textarea
+          value={text}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder="State the core concept, describe runtime mechanics, step through execution order, and highlight important trade-offs or edge cases..."
+          rows={11}
+          aria-label="Your technical explanation"
+          className="w-full p-5 bg-transparent text-[#EDEAE4] placeholder:text-[#99958E] leading-relaxed font-sans text-[15px] focus:outline-none resize-y min-h-[260px]"
+        />
+      </div>
+
+      <div className="flex items-center justify-between text-[11px] font-mono text-[#383431]">
+        <span>Press Tab to indent 2 spaces.</span>
+        <span>Autosaves to local storage</span>
+      </div>
     </div>
   );
 }

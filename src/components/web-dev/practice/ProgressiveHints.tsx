@@ -19,11 +19,11 @@ export function ProgressiveHints({
   return (
     <section aria-labelledby="hints-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-400">
-          <Lightbulb className="w-4 h-4" />
+        <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#A34823] font-semibold">
+          <Lightbulb className="w-3.5 h-3.5 text-[#A34823]" />
           <span id="hints-heading">Progressive Hints</span>
         </div>
-        <span className="text-[11px] font-mono text-slate-400">
+        <span className="text-[11px] font-mono text-[#383431]">
           {revealedHints.length} of {hints.length} revealed
         </span>
       </div>
@@ -38,44 +38,39 @@ export function ProgressiveHints({
               key={idx}
               className={`rounded-xl border transition overflow-hidden ${
                 isRevealed
-                  ? "border-amber-500/30 bg-amber-500/[0.03]"
-                  : "border-slate-800 bg-[#0f172a]/40"
+                  ? "border-[#99958E] bg-[#CFCCC6] shadow-xs"
+                  : "border-[#99958E] bg-[#CFCCC6]/60"
               }`}
             >
               {isRevealed ? (
-                // Revealed hint view
                 <div className="p-3.5 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-mono font-medium text-amber-400">
-                    <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-400 text-[10px] flex items-center justify-center">
+                  <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#A34823]">
+                    <span className="w-4 h-4 rounded-full bg-[#BBB7B0] text-[#A34823] text-[10px] flex items-center justify-center">
                       {idx + 1}
                     </span>
                     <span>Hint #{idx + 1}</span>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                  <p className="text-xs sm:text-sm text-[#272624] leading-relaxed pl-6">
                     {hint}
                   </p>
                 </div>
               ) : (
-                // Locked / reveal trigger view
                 <div className="p-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
-                    <span className="w-4 h-4 rounded-full bg-slate-800 text-slate-400 text-[10px] flex items-center justify-center">
+                  <div className="flex items-center gap-2 text-xs text-[#383431] font-mono">
+                    <span className="w-4 h-4 rounded-full bg-[#BBB7B0] text-[#383431] text-[10px] flex items-center justify-center">
                       {idx + 1}
                     </span>
                     <span>Hint #{idx + 1}</span>
-                    <span className="text-slate-400 text-[10px] hidden sm:inline">
-                      ({idx === 0 ? "Conceptual guidance" : "Specific clue"})
-                    </span>
                   </div>
 
                   <button
                     onClick={() => onRevealHint(idx)}
                     type="button"
                     disabled={!isPreviousRevealed}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium border transition ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition cursor-pointer ${
                       isPreviousRevealed
-                        ? "bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-500/20"
-                        : "opacity-40 cursor-not-allowed bg-slate-800 border-slate-700 text-slate-400"
+                        ? "bg-[#A34823] hover:bg-[#8F3D1C] text-white"
+                        : "opacity-40 cursor-not-allowed bg-[#BBB7B0] text-[#383431]"
                     }`}
                   >
                     <Eye className="w-3 h-3" />

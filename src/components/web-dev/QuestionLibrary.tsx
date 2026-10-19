@@ -10,7 +10,7 @@ import {
   SlidersHorizontal,
   CheckCircle2,
   FolderOpen,
-  Flame,
+  RotateCcw,
   Bookmark,
   FileEdit,
 } from "lucide-react";
@@ -65,28 +65,28 @@ export function QuestionLibrary({
   const bookmarks = store.bookmarks || [];
 
   return (
-    <section id="question-library" aria-labelledby="library-heading" className="space-y-4 pt-2">
+    <section id="question-library" aria-labelledby="library-heading" className="space-y-4 pt-1">
       {/* Header and Results Count */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 id="library-heading" className="text-sm font-mono uppercase tracking-wider text-slate-400">
+          <h2 id="library-heading" className="text-[11px] font-mono uppercase tracking-wider text-[#383431] font-semibold">
             Question Library
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Curated technical interview challenges with interactive practice workspaces and persistent progress.
+          <p className="text-xs text-[#383431] mt-0.5">
+            Targeted technical interview questions with reference solutions and self-evaluation rubrics.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-md border border-slate-800">
-            Showing <strong className="text-white">{questions.length}</strong> of {totalQuestionsCount} questions
+          <span className="text-xs font-mono text-[#383431] bg-[#BBB7B0] px-2.5 py-1 rounded-md border border-[#99958E]">
+            Showing <strong className="text-[#272624]">{questions.length}</strong> of {totalQuestionsCount}
           </span>
 
           {hasActiveFilters && (
             <button
               onClick={onClearAllFilters}
               type="button"
-              className="inline-flex items-center gap-1 text-xs font-mono text-orange-400 hover:text-orange-300 hover:underline transition"
+              className="inline-flex items-center gap-1 text-xs font-mono text-[#A34823] hover:underline transition cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
               <span>Clear filters</span>
@@ -96,24 +96,24 @@ export function QuestionLibrary({
       </div>
 
       {/* Filter Bar */}
-      <div className="p-3 sm:p-4 rounded-xl border border-slate-800 bg-[#0f172a]/70 backdrop-blur-sm space-y-3">
+      <div className="p-3 sm:p-4 rounded-xl border border-[#99958E] bg-[#CFCCC6] space-y-3 shadow-sm">
         {/* Search Input Row */}
         <div className="relative w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-[#383431] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search questions by title, keyword, or concept..."
             aria-label="Search questions"
-            className="w-full pl-10 pr-9 py-2 rounded-lg bg-[#090d16] border border-slate-800 text-sm text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition"
+            className="w-full pl-10 pr-9 py-2 rounded-lg bg-[#BBB7B0] border border-[#99958E] text-sm text-[#272624] placeholder:text-[#5A5652] focus:outline-none focus:border-[#A34823] transition"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange("")}
               type="button"
               aria-label="Clear search query"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#383431] hover:text-[#272624] transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -121,10 +121,10 @@ export function QuestionLibrary({
         </div>
 
         {/* Filter Controls Row */}
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono mr-1">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-            <span>Filters:</span>
+        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+          <div className="flex items-center gap-1.5 text-xs text-[#383431] font-mono mr-1">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#383431]" />
+            <span>Filter:</span>
           </div>
 
           {/* Status Filter */}
@@ -132,7 +132,7 @@ export function QuestionLibrary({
             value={activeStatus}
             onChange={(e) => onSelectStatus(e.target.value as QuestionStatus | "all")}
             aria-label="Filter by practice status"
-            className="text-xs bg-[#090d16] border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-orange-500"
+            className="text-xs bg-[#BBB7B0] border border-[#99958E] text-[#272624] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#A34823]"
           >
             <option value="all">All Statuses</option>
             <option value="not_started">Not Started</option>
@@ -146,7 +146,7 @@ export function QuestionLibrary({
             value={activeMode}
             onChange={(e) => onSelectMode(e.target.value as PracticeMode | "all")}
             aria-label="Filter by practice mode"
-            className="text-xs bg-[#090d16] border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-orange-500"
+            className="text-xs bg-[#BBB7B0] border border-[#99958E] text-[#272624] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#A34823]"
           >
             <option value="all">All Modes</option>
             <option value="explain">Explain</option>
@@ -159,7 +159,7 @@ export function QuestionLibrary({
             value={activeTopic}
             onChange={(e) => onSelectTopic(e.target.value as WebDevTopicId | "all")}
             aria-label="Filter by topic"
-            className="text-xs bg-[#090d16] border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-orange-500 max-w-[200px]"
+            className="text-xs bg-[#BBB7B0] border border-[#99958E] text-[#272624] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#A34823] max-w-[200px]"
           >
             <option value="all">All Topics</option>
             {WEB_DEV_TOPICS.map((t) => (
@@ -174,7 +174,7 @@ export function QuestionLibrary({
             value={activeDifficulty}
             onChange={(e) => onSelectDifficulty(e.target.value as QuestionDifficulty | "all")}
             aria-label="Filter by difficulty"
-            className="text-xs bg-[#090d16] border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-orange-500"
+            className="text-xs bg-[#BBB7B0] border border-[#99958E] text-[#272624] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#A34823]"
           >
             <option value="all">All Difficulties</option>
             <option value="foundation">Foundation</option>
@@ -184,29 +184,27 @@ export function QuestionLibrary({
         </div>
       </div>
 
-      {/* Question Rows List */}
+      {/* Minimal Question Rows with Subtle Separators */}
       {questions.length === 0 ? (
-        /* Empty State */
-        <div className="text-center py-12 px-4 rounded-xl border border-slate-800 bg-[#0f172a]/40 space-y-3">
-          <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+        <div className="text-center py-12 px-4 rounded-xl border border-[#99958E] bg-[#CFCCC6] space-y-3">
+          <div className="w-10 h-10 rounded-full bg-[#BBB7B0] flex items-center justify-center mx-auto text-[#383431]">
             <FolderOpen className="w-5 h-5" />
           </div>
-          <h3 className="text-base font-semibold text-white">No questions match your criteria</h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Try adjusting your search terms or resetting the status, mode, topic, and difficulty filters.
+          <h3 className="text-base font-semibold text-[#272624]">No questions match your criteria</h3>
+          <p className="text-xs text-[#383431] max-w-md mx-auto">
+            Try adjusting your search terms or clearing your filters.
           </p>
           <button
             onClick={onClearAllFilters}
             type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-medium hover:bg-orange-500/20 transition mt-2"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#A34823] text-white text-xs font-medium hover:bg-[#8F3D1C] transition mt-2 cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
             <span>Reset all filters</span>
           </button>
         </div>
       ) : (
-        /* Compact Rows */
-        <div className="space-y-2.5">
+        <div className="border border-[#99958E] rounded-xl bg-[#CFCCC6] divide-y divide-[#99958E] shadow-sm overflow-hidden">
           {questions.map((question) => {
             const status = getQuestionStatus(question.slug, store);
             const isBookmarked = bookmarks.includes(question.slug);
@@ -214,75 +212,66 @@ export function QuestionLibrary({
             return (
               <div
                 key={question.id}
-                className="group p-4 rounded-xl border border-slate-800 bg-[#0f172a]/50 hover:bg-[#131d33] hover:border-slate-700 transition flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="group p-3.5 sm:p-4 hover:bg-[#BBB7B0]/50 transition flex flex-col md:flex-row md:items-center justify-between gap-3"
               >
                 {/* Left column: Status indicator + bookmark + title + summary */}
                 <div className="flex items-start gap-3 min-w-0 flex-1">
                   {/* Status Indicator */}
                   <div className="pt-0.5 shrink-0 flex items-center gap-1.5">
                     {status === "completed" && (
-                      <span
-                        title="Completed and reviewed"
-                        className="inline-flex text-emerald-400"
-                      >
+                      <span title="Completed and self-reviewed" className="text-[#A34823]">
                         <CheckCircle2 className="w-4 h-4" />
                       </span>
                     )}
                     {status === "in_progress" && (
-                      <span
-                        title="In progress (Draft saved)"
-                        className="inline-flex text-amber-400"
-                      >
+                      <span title="In progress (Draft saved)" className="text-[#383431]">
                         <FileEdit className="w-4 h-4" />
                       </span>
                     )}
                     {status === "needs_revision" && (
-                      <span
-                        title="Revision due"
-                        className="inline-flex text-orange-400"
-                      >
-                        <Flame className="w-4 h-4" />
+                      <span title="Revision due" className="text-[#A34823]">
+                        <RotateCcw className="w-4 h-4" />
                       </span>
                     )}
                     {status === "not_started" && (
                       <span
                         title="Not started"
-                        className="inline-block w-4 h-4 rounded-full border border-slate-700/80 bg-slate-800/40"
+                        className="inline-block w-2.5 h-2.5 rounded-full bg-[#99958E] mx-0.5"
                       />
                     )}
 
                     {isBookmarked && (
-                      <Bookmark className="w-3.5 h-3.5 fill-blue-400 text-blue-400 shrink-0" />
+                      <Bookmark className="w-3.5 h-3.5 fill-[#A34823] text-[#A34823] shrink-0" />
                     )}
                   </div>
 
-                  <div className="space-y-1 min-w-0">
+                  <div className="space-y-0.5 min-w-0">
                     <Link
                       href={`/developer/practice/${question.slug}`}
-                      className="text-sm font-semibold text-white group-hover:text-orange-400 transition hover:underline truncate block"
+                      className="text-sm font-semibold text-[#272624] group-hover:text-[#A34823] transition truncate block"
                     >
                       {question.title}
                     </Link>
-                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-1">
+                    <p className="text-xs text-[#383431] leading-relaxed line-clamp-1">
                       {question.summary}
                     </p>
                   </div>
                 </div>
 
-                {/* Right column: Badges + Action */}
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800/80">
+                {/* Right column: Subtle badges + Action */}
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0 pt-2 md:pt-0">
                   <TopicBadge topicId={question.topic} />
                   <ModeBadge mode={question.mode} />
                   <WebDevDifficultyBadge difficulty={question.difficulty} />
 
-                  <span className="flex items-center gap-1 text-xs font-mono text-slate-400 shrink-0">
-                    <Clock className="w-3.5 h-3.5 text-slate-500" />
+                  <span className="flex items-center gap-1 text-xs font-mono text-[#383431] shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-[#A34823]" />
                     <span>{question.estimatedMinutes}m</span>
                   </span>
 
                   <Link
                     href={`/developer/practice/${question.slug}`}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-orange-500 hover:text-white text-xs font-medium text-slate-200 border border-slate-700/80 group-hover:border-slate-600 transition ml-1"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#99958E] bg-[#BBB7B0] hover:bg-[#A34823] hover:text-white text-xs font-medium text-[#272624] transition ml-1 cursor-pointer"
                   >
                     <span>
                       {status === "in_progress"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, KeyboardEvent } from "react";
-import { Bug, Wrench, Check } from "lucide-react";
+import { Bug, Wrench } from "lucide-react";
 
 interface DebugWorkspaceProps {
   initialRootCause: string;
@@ -56,66 +56,75 @@ export function DebugWorkspace({
 
   return (
     <div className="space-y-4">
-      {/* Save indicator */}
-      <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-        <span className="text-amber-400 font-semibold uppercase tracking-wider">
+      {/* Workspace Header Toolbar */}
+      <div className="flex items-center justify-between text-xs font-mono text-[#383431]">
+        <span className="font-semibold text-[#272624]">
           Diagnostic Workspace
         </span>
-        <span className="flex items-center gap-1 text-[11px] text-slate-400">
-          {isSaved ? (
-            <>
-              <Check className="w-3 h-3 text-emerald-400" />
-              <span>Saved locally</span>
-            </>
-          ) : (
-            <span className="text-amber-400">Saving...</span>
-          )}
+        <span className="flex items-center gap-1.5 text-[11px]">
+          <span
+            className={`w-1.5 h-1.5 rounded-full transition-colors ${
+              isSaved ? "bg-[#A34823]" : "bg-[#99958E] animate-pulse"
+            }`}
+          />
+          <span className="text-[#383431]">{isSaved ? "Saved" : "Saving..."}</span>
         </span>
       </div>
 
       {/* Section 1: Root Cause Analysis */}
       <div className="space-y-1.5">
-        <label htmlFor="debug-root-cause" className="flex items-center gap-1.5 text-xs font-mono text-slate-300">
-          <Bug className="w-3.5 h-3.5 text-amber-400" />
+        <label
+          htmlFor="debug-root-cause"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#272624]"
+        >
+          <Bug className="w-3.5 h-3.5 text-[#A34823]" />
           <span>1. Root Cause Diagnosis</span>
         </label>
-        <textarea
-          id="debug-root-cause"
-          value={rootCause}
-          onChange={(e) => {
-            setRootCause(e.target.value);
-            scheduleSave(e.target.value, fix);
-          }}
-          onKeyDown={(e) => handleTabIndent(e, rootCause, setRootCause, true)}
-          placeholder="Explain the underlying cause of the bug. Why does this failure occur under specific runtime or network conditions? What invariant was broken?"
-          rows={4}
-          className="w-full p-3.5 rounded-xl border border-slate-800 bg-[#090d16] text-sm text-slate-200 placeholder:text-slate-400 leading-relaxed font-sans focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition resize-y min-h-[100px]"
-        />
+        <div className="rounded-xl border border-[#99958E] bg-[#2D2C2A] overflow-hidden focus-within:border-[#A34823] transition-colors shadow-xs">
+          <textarea
+            id="debug-root-cause"
+            value={rootCause}
+            onChange={(e) => {
+              setRootCause(e.target.value);
+              scheduleSave(e.target.value, fix);
+            }}
+            onKeyDown={(e) => handleTabIndent(e, rootCause, setRootCause, true)}
+            placeholder="Explain the underlying cause of the bug. Why does this failure occur under specific runtime or state conditions? What invariant was broken?"
+            rows={4}
+            className="w-full p-4 bg-transparent text-[#EDEAE4] placeholder:text-[#99958E] leading-relaxed font-sans text-sm focus:outline-none resize-y min-h-[100px]"
+          />
+        </div>
       </div>
 
       {/* Section 2: Proposed Fix / Corrected Code */}
       <div className="space-y-1.5">
-        <label htmlFor="debug-proposed-fix" className="flex items-center gap-1.5 text-xs font-mono text-slate-300">
-          <Wrench className="w-3.5 h-3.5 text-amber-400" />
-          <span>2. Proposed Fix & Verification</span>
+        <label
+          htmlFor="debug-proposed-fix"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#272624]"
+        >
+          <Wrench className="w-3.5 h-3.5 text-[#A34823]" />
+          <span>2. Corrective Fix &amp; Verification</span>
         </label>
-        <textarea
-          id="debug-proposed-fix"
-          value={fix}
-          onChange={(e) => {
-            setFix(e.target.value);
-            scheduleSave(rootCause, e.target.value);
-          }}
-          onKeyDown={(e) => handleTabIndent(e, fix, setFix, false)}
-          placeholder="Provide the corrected code or configuration fix, and explain how to verify it (e.g. unit test, load test, or reproduction steps)..."
-          rows={6}
-          className="w-full p-3.5 rounded-xl border border-slate-800 bg-[#090d16] text-sm text-slate-200 placeholder:text-slate-400 leading-relaxed font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition resize-y min-h-[140px]"
-        />
+        <div className="rounded-xl border border-[#99958E] bg-[#2D2C2A] overflow-hidden focus-within:border-[#A34823] transition-colors shadow-xs">
+          <textarea
+            id="debug-proposed-fix"
+            value={fix}
+            onChange={(e) => {
+              setFix(e.target.value);
+              scheduleSave(rootCause, e.target.value);
+            }}
+            onKeyDown={(e) => handleTabIndent(e, fix, setFix, false)}
+            placeholder="Provide the corrected code, and outline the verification steps (unit test case, edge cases, reproduction checks)..."
+            rows={6}
+            className="w-full p-4 bg-transparent text-[#EDEAE4] placeholder:text-[#99958E] leading-relaxed font-mono text-xs sm:text-sm focus:outline-none resize-y min-h-[140px]"
+          />
+        </div>
       </div>
 
-      <p className="text-[11px] text-slate-400 font-mono">
-        Tip: Press Tab to indent code snippets. Drafts autosave continuously.
-      </p>
+      <div className="flex items-center justify-between text-[11px] font-mono text-[#383431]">
+        <span>Press Tab to indent 2 spaces.</span>
+        <span>Autosaves to local storage</span>
+      </div>
     </div>
   );
 }
