@@ -19,6 +19,7 @@ const emptyStore: UserPracticeStore = {
   bookmarks: [],
   mistakeJournal: [],
   revisions: {},
+  pastInterviewSessions: [],
   updatedAt: "",
 };
 
@@ -55,6 +56,8 @@ function readStorage(): UserPracticeStore {
           revisions: parsed.revisions || {},
           lastVisitedSlug: parsed.lastVisitedSlug,
           lastUnfinishedSlug: parsed.lastUnfinishedSlug,
+          activeInterviewSession: parsed.activeInterviewSession,
+          pastInterviewSessions: Array.isArray(parsed.pastInterviewSessions) ? parsed.pastInterviewSessions : [],
           updatedAt: parsed.updatedAt || "",
         };
       }
