@@ -10,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function RevisionPage() {
   return (
-    <React.Suspense fallback={<div className="min-h-screen bg-[#090d16]" />}>
-      <RevisionQueueView />
-    </React.Suspense>
+    <div className="min-h-screen bg-[#AAA7A3] text-[#272624]">
+      <React.Suspense fallback={<div className="min-h-screen bg-[#AAA7A3]" />}>
+        <RevisionQueueView />
+      </React.Suspense>
+    </div>
   );
 }

@@ -3,15 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  BookOpen,
-  ChevronRight,
-  ArrowLeft,
-  CheckCircle2,
-  Terminal,
-  HelpCircle,
   Lightbulb,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  ChevronRight,
   ArrowRight,
-  Code2
+  ArrowLeft
 } from "lucide-react";
 import {
   getInterviewQuestions,
@@ -44,7 +42,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   }
 
   return {
-    title: `${question.title} — Technical Interview Preparation`,
+    title: `${question.title} — Technical Interview Guide`,
     description: question.explanation.slice(0, 160),
   };
 }
@@ -70,51 +68,51 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 space-y-12">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs font-mono text-slate-400" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-slate-200 transition">
+      <nav className="flex items-center gap-2 text-xs font-mono text-[#383431]" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-[#272624] transition">
           Home
         </Link>
-        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-        <Link href="/interview-questions" className="hover:text-slate-200 transition">
+        <ChevronRight className="w-3.5 h-3.5 text-[#99958E]" />
+        <Link href="/interview-questions" className="hover:text-[#272624] transition">
           Interview Questions
         </Link>
-        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+        <ChevronRight className="w-3.5 h-3.5 text-[#99958E]" />
         {tech && (
           <>
-            <Link href={`/developer/${tech.slug}`} className="hover:text-slate-200 transition">
+            <Link href={`/developer/${tech.slug}`} className="hover:text-[#272624] transition">
               {tech.name}
             </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#99958E]" />
           </>
         )}
-        <span className="text-purple-400 font-semibold truncate max-w-xs">{question.topic}</span>
+        <span className="text-[#A34823] font-semibold truncate max-w-xs">{question.topic}</span>
       </nav>
 
       {/* Question Header Card */}
-      <div className="p-8 rounded-3xl border border-slate-800 bg-[#0c1220] space-y-4">
+      <div className="p-8 rounded-3xl border border-[#99958E] bg-[#CFCCC6] space-y-4 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-purple-400 bg-purple-500/10 border border-purple-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-[#272624] bg-[#BBB7B0] border border-[#99958E]">
               {tech?.name || question.technologySlug}
             </span>
-            <span className="text-slate-600">•</span>
-            <span className="text-xs font-mono text-slate-400">{question.topic}</span>
+            <span className="text-[#99958E]">•</span>
+            <span className="text-xs font-mono text-[#383431] font-semibold">{question.topic}</span>
           </div>
           <DifficultyBadge difficulty={question.difficulty} />
         </div>
 
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#272624] tracking-tight leading-snug">
           {question.title}
         </h1>
       </div>
 
       {/* Conceptual Breakdown */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-          <Lightbulb className="w-4 h-4 text-amber-400" />
+        <div className="flex items-center gap-2 text-sm font-bold text-[#272624]">
+          <Lightbulb className="w-4 h-4 text-[#A34823]" />
           <span>Conceptual Explanation &amp; Rationale</span>
         </div>
-        <div className="p-6 rounded-2xl border border-slate-800 bg-[#0f172a]/50 text-slate-200 text-sm leading-relaxed whitespace-pre-line">
+        <div className="p-6 rounded-2xl border border-[#99958E] bg-[#CFCCC6] text-[#383431] text-sm leading-relaxed whitespace-pre-line shadow-xs">
           {question.explanation}
         </div>
       </section>
@@ -122,8 +120,8 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
       {/* Code Walkthrough (if present) */}
       {question.codeExample && (
         <section className="space-y-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-            <Code2 className="w-4 h-4 text-emerald-400" />
+          <div className="flex items-center gap-2 text-sm font-bold text-[#272624]">
+            <Code2 className="w-4 h-4 text-[#A34823]" />
             <span>Code Example &amp; Implementation Walkthrough</span>
           </div>
           <CodeBlock
@@ -137,11 +135,11 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
       {/* Output Prediction / Execution Trace (if present) */}
       {question.outputPrediction && (
         <section className="space-y-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-            <Terminal className="w-4 h-4 text-sky-400" />
+          <div className="flex items-center gap-2 text-sm font-bold text-[#272624]">
+            <Terminal className="w-4 h-4 text-[#A34823]" />
             <span>Execution Flow &amp; Output Prediction</span>
           </div>
-          <div className="p-5 rounded-2xl border border-slate-800 bg-[#070a12] font-mono text-xs text-slate-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">
+          <div className="p-5 rounded-2xl border border-[#99958E] bg-[#2D2C2A] font-mono text-xs text-[#EDEAE4] leading-relaxed overflow-x-auto whitespace-pre-wrap shadow-xs">
             {question.outputPrediction}
           </div>
         </section>
@@ -149,14 +147,14 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
 
       {/* Key Takeaways Checklist */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-200">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2 text-sm font-bold text-[#272624]">
+          <CheckCircle2 className="w-4 h-4 text-[#A34823]" />
           <span>Key Interview Takeaways</span>
         </div>
-        <div className="p-6 rounded-2xl border border-slate-800 bg-[#0f172a]/40 space-y-3">
+        <div className="p-6 rounded-2xl border border-[#99958E] bg-[#CFCCC6] space-y-3 shadow-xs">
           {question.keyTakeaways.map((point, idx) => (
-            <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-              <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 text-xs font-mono font-bold">
+            <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-[#383431]">
+              <span className="w-5 h-5 rounded-full bg-[#BBB7B0] border border-[#99958E] text-[#272624] flex items-center justify-center shrink-0 mt-0.5 text-xs font-mono font-bold">
                 {idx + 1}
               </span>
               <p className="leading-relaxed">{point}</p>
@@ -167,25 +165,25 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
 
       {/* Related Questions */}
       {relatedQuestions.length > 0 && (
-        <section className="space-y-4 pt-4 border-t border-slate-800">
-          <h3 className="text-base font-bold text-white">Related Technical Questions</h3>
+        <section className="space-y-4 pt-4 border-t border-[#99958E]/60">
+          <h3 className="text-base font-bold text-[#272624]">Related Technical Questions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {relatedQuestions.map((rel) => (
               <Link
                 key={rel.id}
                 href={`/interview-questions/${rel.technologySlug}/${rel.slug}`}
-                className="group p-5 rounded-2xl border border-slate-800 bg-[#0f172a]/40 hover:bg-[#131d33] transition flex flex-col justify-between space-y-2"
+                className="group p-5 rounded-2xl border border-[#99958E] bg-[#CFCCC6] hover:bg-[#BBB7B0] transition flex flex-col justify-between space-y-2 shadow-xs"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-purple-400 uppercase">{rel.topic}</span>
+                  <span className="text-[11px] font-mono text-[#A34823] font-semibold uppercase">{rel.topic}</span>
                   <DifficultyBadge difficulty={rel.difficulty} />
                 </div>
-                <h4 className="text-sm font-bold text-white group-hover:text-purple-300 transition">
+                <h4 className="text-sm font-bold text-[#272624] group-hover:text-[#A34823] transition">
                   {rel.title}
                 </h4>
-                <div className="text-xs text-purple-400 pt-2 flex items-center gap-1 font-medium">
-                  <span>View Explanation</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                <div className="flex items-center gap-1 text-xs text-[#A34823] font-semibold pt-1">
+                  <span>Read Guide</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </Link>
             ))}
@@ -193,14 +191,14 @@ export default async function InterviewQuestionDetailPage(props: PageProps) {
         </section>
       )}
 
-      {/* Back to Directory */}
-      <div className="pt-8 border-t border-slate-800 flex justify-between items-center text-xs">
+      {/* Footer Navigation */}
+      <div className="pt-8 border-t border-[#99958E]/60 flex justify-between items-center text-xs">
         <Link
           href="/interview-questions"
-          className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition font-medium"
+          className="inline-flex items-center gap-1.5 text-[#383431] hover:text-[#A34823] transition font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Interview Questions</span>
+          <span>Back to All Questions</span>
         </Link>
       </div>
     </div>

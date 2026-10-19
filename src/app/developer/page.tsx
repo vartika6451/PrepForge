@@ -11,20 +11,14 @@ export const metadata: Metadata = {
 
 function WebDevHubSkeleton() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-10 animate-pulse">
-      <div className="h-20 bg-slate-800/40 rounded-xl" />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-        <div className="h-32 bg-slate-800/40 rounded-xl" />
-        <div className="h-32 bg-slate-800/40 rounded-xl" />
-        <div className="h-32 bg-slate-800/40 rounded-xl" />
+    <div className="min-h-screen bg-[#AAA7A3] text-[#272624]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-8 animate-pulse">
+        <div className="h-16 bg-[#BBB7B0] rounded-xl" />
+        <div className="h-24 bg-[#CFCCC6] rounded-2xl border border-[#99958E]" />
+        <div className="h-44 bg-[#CFCCC6] rounded-2xl border border-[#99958E]" />
+        <div className="h-12 bg-[#CFCCC6] rounded-xl border border-[#99958E]" />
+        <div className="h-64 bg-[#CFCCC6] rounded-xl border border-[#99958E]" />
       </div>
-      <div className="h-36 bg-slate-800/40 rounded-2xl" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="h-28 bg-slate-800/40 rounded-xl" />
-        ))}
-      </div>
-      <div className="h-64 bg-slate-800/40 rounded-xl" />
     </div>
   );
 }
@@ -34,11 +28,13 @@ export default function DeveloperPage() {
   const topicsWithCounts = getWebDevTopicsWithCounts();
 
   return (
-    <Suspense fallback={<WebDevHubSkeleton />}>
-      <WebDevHubClient
-        initialQuestions={questions}
-        topicsWithCounts={topicsWithCounts}
-      />
-    </Suspense>
+    <div className="min-h-screen bg-[#AAA7A3] text-[#272624]">
+      <Suspense fallback={<WebDevHubSkeleton />}>
+        <WebDevHubClient
+          initialQuestions={questions}
+          topicsWithCounts={topicsWithCounts}
+        />
+      </Suspense>
+    </div>
   );
 }

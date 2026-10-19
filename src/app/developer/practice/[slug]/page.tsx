@@ -32,8 +32,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   };
 }
 
-export default async function PracticeQuestionPage(props: PageProps) {
-  const { slug } = await props.params;
+async function PracticeQuestionContent({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const question = getWebDevQuestionBySlug(slug);
 
   if (!question) {
@@ -41,9 +41,15 @@ export default async function PracticeQuestionPage(props: PageProps) {
   }
 
   const allQuestions = getAllWebDevQuestions();
+  return <PracticeQuestionView question={question} allQuestions={allQuestions} />;
+}
+
+export default function PracticeQuestionPage(props: PageProps) {
   return (
-    <React.Suspense fallback={<div className="min-h-screen bg-[#090d16]" />}>
-      <PracticeQuestionView question={question} allQuestions={allQuestions} />
-    </React.Suspense>
+    <div className="min-h-screen bg-[#AAA7A3] text-[#272624]">
+      <React.Suspense fallback={<div className="min-h-screen bg-[#AAA7A3]" />}>
+        <PracticeQuestionContent params={props.params} />
+      </React.Suspense>
+    </div>
   );
 }
