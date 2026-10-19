@@ -23,37 +23,37 @@ export function CodeBlock({ code, language = "typescript", title }: CodeBlockPro
   };
 
   return (
-    <div className="my-4 rounded-xl border border-slate-800 bg-[#090d16] overflow-hidden shadow-lg">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-slate-800/80 bg-[#0f172a]/60 text-xs text-slate-400">
+    <div className="my-4 rounded-xl border border-[#99958E] bg-[#2D2C2A] overflow-hidden shadow-md">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-[#99958E]/60 bg-[#242321] text-xs text-[#EDEAE4]">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#99958E]/40" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#99958E]/40" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#99958E]/40" />
           </div>
-          {title && <span className="font-mono text-slate-300 ml-2">{title}</span>}
-          {!title && <span className="font-mono text-slate-400">{language}</span>}
+          {title && <span className="font-mono text-[#EDEAE4] font-medium ml-2">{title}</span>}
+          {!title && <span className="font-mono text-[#EDEAE4]/80">{language}</span>}
         </div>
         <button
           onClick={handleCopy}
           type="button"
           aria-label="Copy code snippet"
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-[#EDEAE4] hover:bg-[#3D3B38] transition cursor-pointer"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400">Copied</span>
+              <Check className="w-3.5 h-3.5 text-[#C9A28E]" />
+              <span className="text-[#C9A28E]">Copied</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
+              <Copy className="w-3.5 h-3.5 text-[#EDEAE4]/70" />
               <span>Copy</span>
             </>
           )}
         </button>
       </div>
-      <div className="p-4 overflow-x-auto text-sm font-mono text-slate-200 leading-relaxed">
+      <div className="p-4 overflow-x-auto text-sm font-mono text-[#EDEAE4] leading-relaxed">
         <pre>{code}</pre>
       </div>
     </div>
